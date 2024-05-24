@@ -12,14 +12,15 @@
 6) Проверить, чтобы все работало и не было ошибок в консоли
 */
 
-const ROLLBACK = 5;
+const rollback = 5;
 
-let title,
-	screens,
-	screenPrice,
-	adaptive,
-	fullPrice, 
-	service1,
+let title = 'Glo Javascript Course Project';
+let screens = 'Простые, Сложные, Интерактивные';
+let screenPrice = 2000;
+let adaptive = true;
+let fullPrice = 50000;
+
+let service1,
 	servicePrice1,
 	service2,
 	servicePrice2,
@@ -47,8 +48,8 @@ const rollbackCount = function (fPrice, rb) {
 	return fPrice * (rb / 100);
 }
 
-const calcPriceAfterRollback = function () {
-	return Math.ceil(fullPrice - rollbackCount(fullPrice, ROLLBACK));
+const calcRollback = function () {
+	return Math.ceil(fullPrice - rollbackCount(fullPrice, rollback));
 }
 
 const getTitle = function () {
@@ -63,61 +64,48 @@ const getTitle = function () {
 }
 
 const getServicePercentPrices = function () {
-	return fullPrice - rollbackCount(fullPrice, ROLLBACK);
+	return getFullPrice() - rollbackCount(fullPrice, rollback);
 }
 
-const getRollbackMessage = function (price) {
+const getRollbackMessage = function () {
 	switch (true) {
-		case price >= 30000:
-			return `Поздравляем! Вы получили от нас скидку 10%! Ваша цена теперь составляет ${price - (price * 0.1)}₽!`;
-		case price <= 30000 && price >= 15000:
-			return `Поздравляем! Вы получили от нас скидку 5%! Ваша цена теперь составляет ${price - (price * 0.05)}₽!`;
-		case price <= 15000 && price >= 0:
-			return `Скидка не предусмотрена. Ваша цена ${price}₽.`;
-		case price < 0:
-			return 'Что-то пошло не так...';
+		case fullPrice >= 30000:
+			console.log(`Поздравляем! Вы получили от нас скидку 10%! Ваша цена теперь составляет ${fullPrice - (fullPrice * 0.1)}₽!`);
+			break;
+		case fullPrice <= 30000 && fullPrice >= 15000:
+			console.log(`Поздравляем! Вы получили от нас скидку 5%! Ваша цена теперь составляет ${fullPrice - (fullPrice * 0.05)}₽!`);
+			break;
+		case fullPrice <= 15000 && fullPrice >= 0:
+			console.log(`Скидка не предусмотрена. Ваша цена ${fullPrice}₽.`);
+			break;
+		case fullPrice < 0:
+			console.log('Что-то пошло не так...');
+			break;
 	}
 }
 
 function getFullPrice() {
-	return screenPrice + allServicePrices;
+	return screenPrice + getAllServicePrices(servicePrice1, servicePrice2);
 }
 
-do {
-	title = promptQuestion('Как называется ваш проект?');
-} while (!title);
-
+title = promptQuestion('Как называется ваш проект?');
 getTitle(title);
 
-do {
-	screens = promptQuestion('Какие типы экранов нужно разработать?', 'Простые, Сложные, Интерактивные');
-} while (!screens);
-
+screens = promptQuestion('Какие типы экранов нужно разработать?', 'Простые, Сложные, Интерактивные');
 screensVariety = screens.toLowerCase().split(', ');
 
-do {
-	screenPrice = parseInt(promptQuestion('Сколько будет стоить данная работа?', '12000'));
-} while (!screenPrice);
+screenPrice = parseInt(promptQuestion('Сколько будет стоить данная работа?', '12000'));
 
 adaptive = confirmQuestion('Нужен ли адаптив на сайте?');
 
 service1 = confirmQuestion('Нужна ли вам SEO-оптимизация сайта?');
-if (service1) {
-	do {
-		servicePrice1 = parseInt(promptQuestion('Какой у вас бюджет для данной услуги?'));
-	} while (!servicePrice1);
-}
-	
+if (service1) servicePrice1 = parseInt(promptQuestion('Какой у вас бюджет для данной услуги?'));
 
 service2 = confirmQuestion('Нужно вам наполнение и сопровождение сайта?');
-if (service2) {
-	do {
-		servicePrice2 = parseInt(promptQuestion('Какой у вас бюджет для данной услуги?'));
-	} while (!servicePrice2);
-}
+if (service2) servicePrice2 = parseInt(promptQuestion('Какой у вас бюджет для данной услуги?'));
 
-allServicePrices = getAllServicePrices(servicePrice1, servicePrice2);
 fullPrice = getFullPrice();
+
 servicePercentPrice = getServicePercentPrices();
 
 showTypeOf(title);
@@ -126,6 +114,6 @@ showTypeOf(adaptive);
 
 console.log(screens);
 
-console.log(getRollbackMessage(fullPrice));
+getRollbackMessage();
 
 console.log(getServicePercentPrices());
