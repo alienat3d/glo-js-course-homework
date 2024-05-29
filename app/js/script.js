@@ -1,69 +1,80 @@
 'use strict';
 /* 
-1) Перенести все функции в объект (сделать их методами объекта)
-2) Создать в объекте метод start и перенести в него вызов метода asking и переопределение свойств. Вне самого объекта запускаем только метод start который в нужном порядке выполнит все действия.
-3) Создать в объекте метод logger который будет выводить в консоль необходимую информацию. Данный метод запускаем в самом конце метода start (после того как все расчеты уже были произведены)
-4) Вывести в консоль из метода logger все свойства и методы объекта appData с помощью цикла for in
-Таким образом вне объекта теперь должен быть только вызов метода start( )
+1) Сделать проверку при получении данных:
+- ответ на вопрос "Как называется ваш проект?" - строка
+- ответ на вопрос "Какие типы экранов нужно разработать?" - строка
+- ответ на вопрос "Сколько будет стоить данная работа?" - число
+- ответ на вопрос "Какой дополнительный тип услуги нужен?" - строка
+- ответ на вопрос "Сколько это будет стоить?" - число
+Что значит проверка данных: где должен быть текст там только текст(голые цифры не должно пропускать, а текст с цифрами - должно. Пример: "Купил ВАЗ 2108" - ок, "4567989" - нет), где цифры только цифры!
+Если проверку не прошло, то переспрашивать
 */
-
 const appData = {
 	ROLLBACK: 5,
 	title: '',
-	screens: '',
+	screens: [],
 	screenPrice: 0,
 	adaptive: true,
 	allServicePrices: 0,
 	fullPrice: 0,
 	servicePercentPrice: 0,
-	service1: '',
-	service2: '',
+	services: {},
 	ask: function () {
-		appData.title = prompt('Как называется ваш проект?', ' КаЛьКулятор Верстки');
-		appData.screens = prompt('Какие типы экранов нужно разработать?', 'Простые, Сложные, Интерактивные');
-
 		do {
-			appData.screenPrice = prompt('Сколько будет стоить данная работа? (₽)')
-		} while (!appData.isNumber(appData.screenPrice));
+			appData.title = prompt('Как называется ваш проект?', ' КаЛьКулятор Верстки');
+		} while (appData.isNumber(appData.title));
 
-		appData.adaptive = confirm('Нужен ли адаптив на сайте?');
-	},
-	isNumber: function (num) {
-		return !isNaN(parseFloat(num) && isFinite(num));
-	},
-	getAllServicePrices: function () {
-		let sum = 0;
 
 		for (let i = 0; i < 2; i++) {
+			let name = '';
 			let price = 0;
 
-			if (i === 0) {
-				appData.service1 = prompt('Какой дополнительный тип услуги нужен?');
-			} else if (i === 1) {
-				appData.service2 = prompt('Какой дополнительный тип услуги нужен?');
-			}
+			do {
+				name = prompt('Какие типы экранов нужно разработать?');
+			} while (appData.isNumber(name));
 
 			do {
-				price = prompt('Сколько будет стоить данная работа? (₽)')
+				price = prompt('Сколько будет стоить данная работа? (₽)');
 			} while (!appData.isNumber(price));
 
-			sum += +price;
+			appData.screens.push({ id: i, name, price });
 		}
 
-		return sum;
-	},
-	getFullPrice: function () {
-		return +appData.screenPrice + appData.allServicePrices;
-	},
-	getTitle: function () {
-		if (!appData.title) {
-			return console.log('Название проекта не было указано!');
-		} else {
-			return appData.title.trim()[0].toUpperCase() + appData.title.trim().substring(1).toLowerCase();
+		for (let i = 0; i < 2; i++) {
+			let name = '';
+			let price = 0;
+
+			do {
+				name = prompt('Какой дополнительный тип услуги нужен?');
+			} while (appData.isNumber(name));
+
+			do {
+				price = prompt('Сколько будет стоить данная работа? (₽)');
+			} while (!appData.isNumber(price));
+
+			appData.services[name] = +price;
 		}
 	},
+	addPrices: function () {
+		for (const screen of appData.screens) {
+			appData.screenPrice += +screen.price;
+		}
+
+		for (const price in appData.services) {
+			appData.allServicePrices += appData.services[price];
+		}
+	},
+	isNumber: function (num) {
+		return !isNaN(parseFloat(num)) && isFinite(num);
+	},
+	getFullPrice: function () {
+		appData.fullPrice = +appData.screenPrice + appData.allServicePrices;
+	},
+	getTitle: function () {
+		appData.title = appData.title.trim()[0].toUpperCase() + appData.title.trim().substring(1).toLowerCase();
+	},
 	getServicePercentPrice: function () {
-		return appData.fullPrice - (appData.fullPrice * (appData.ROLLBACK / 100));
+		appData.servicePercentPrice = appData.fullPrice - (appData.fullPrice * (appData.ROLLBACK / 100));
 	},
 	getRollbackMessage: function (price) {
 		if (price >= 30000) {
@@ -78,19 +89,16 @@ const appData = {
 	},
 	start: function () {
 		appData.ask();
-		appData.allServicePrices = appData.getAllServicePrices();
-		appData.fullPrice = appData.getFullPrice();
-		appData.servicePercentPrice = appData.getServicePercentPrice();
-		appData.title = appData.getTitle();
+		appData.addPrices();
+		appData.getFullPrice();
+		appData.getServicePercentPrice();
+		appData.getTitle();
 		appData.logger();
 	},
 	logger: function () {
 		console.log(appData.fullPrice);
 		console.log(appData.servicePercentPrice);
-
-		for (const key in appData) {
-			console.log(key);
-		}
+		console.log(appData.screens);
 	}
 }
 
