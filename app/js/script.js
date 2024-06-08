@@ -19,14 +19,15 @@ const plusBtn = document.querySelector('.screen-btn');
 const optionPercentCheckboxes = document.querySelectorAll('.other-items.percent');
 const optionNumCheckboxes = document.querySelectorAll('.other-items.number');
 const rollbackController = document.querySelector('.rollback span.range-value');
-const priceInputsCollection = document.getElementsByClassName('input.total-input');
+const priceInputsCollection = document.getElementsByClassName('total-input');
+let screenTypes = document.querySelectorAll('.screen');
 let priceInputs = [];
 
 for (let index = 0; index < priceInputsCollection.length; index++) {
 	priceInputs.push(priceInputsCollection[index]);
 }
 
-console.log(priceInputs);
+console.log(screenTypes);
 
 /* const appData = {
 	ROLLBACK: 5,
