@@ -1,4 +1,5 @@
-﻿<h1 align="center">« Marcho »</h1>
+﻿<h1 align="center">« Intensive JavaScript Course »</h1>
+<h3 align="center">[Repo with the base homeworks]</h3>
 <h4 align="center"><a href="https://glo.academy/jscript/" target="_blank">at Glo Academy</a></h4>
 
 ## Time spent in this project:
