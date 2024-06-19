@@ -14,40 +14,34 @@
 */
 
 const game = () => {
+	const N = 33;
+
 	const num = prompt('Угадайте число от 1 до 100');
-	const isNan = function (num) {
-		return !isNaN(parseFloat(num) && isFinite(num));
-	}
-	/* 	const regExp = /^-?\\d*(\\.\\d+)?$/;
-		const isNumber = function(value) {
-			return regExp.test(value);
-		}
-		return isNumber(num); */
 
 	switch (true) {
-		case (+num < 1 || +num > 100):
-			alert('Загаданное число должно быть в диапазоне между 1 и 100 включительно. Попробуйте снова!');
-			ask();
-			break;
-		case (+num === n):
-			alert('Поздравляю, Вы угадали!!!\nОбновите страницу, чтобы сыграть еще раз. (F5 на клавиатуре)');
-			break;
-		case +num > n:
-			alert('Загаданное число меньше предложенного вами числа. Попробуйте снова!');
-			ask();
-			break;
-		case +num < n:
-			alert('Загаданное число больше предложенного вами числа. Попробуйте снова!');
-			ask();
-			break;
 		case num === null:
 			alert('Игра окончена.\nОбновите страницу, чтобы сыграть еще раз. (F5 на клавиатуре)');
 			break;
-		case isNan():
-			alert('Упс, кажется вы ввели вовсе не цифру! Попробуйте снова!');
-			ask();
+		case +num < 1 || +num > 100:
+			alert('Загаданное число должно быть в диапазоне между 1 и 100 включительно. Попробуйте снова!');
+			game();
 			break;
+		case +num === N:
+			const oneMore = confirm('Поздравляю, Вы угадали!!!\nХотите сыграть ещё раз?');
+			if (oneMore) game();
+			break;
+		case +num > N:
+			alert('Загаданное число меньше предложенного вами числа. Попробуйте снова!');
+			game();
+			break;
+		case +num < N:
+			alert('Загаданное число больше предложенного вами числа. Попробуйте снова!');
+			game();
+			break;
+		default:
+			alert('Неправильный ввод. Попробуйте снова!');
+			game();
 	}
 }
 
-console.log(game());
+game();
