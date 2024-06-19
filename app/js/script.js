@@ -44,10 +44,10 @@ const DomElement = function (selector, height, width, bg, fontSize, text) {
 
 		if (prefixSelector === '.') {
 			element = document.createElement('div');
-			element.classList.add(this.selector);
+			element.classList.add(this.selector.substring(1));
 		} else if (prefixSelector === '#') {
 			element = document.createElement('p');
-			element.setAttribute('id', this.selector);
+			element.setAttribute('id', this.selector.substring(1));
 		} else {
 			console.error('Проверьте селектор, разрешены для ввода только класс (".") и id ("#")');
 		}
