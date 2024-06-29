@@ -27,9 +27,7 @@ for (let index = 0; index < priceInputsCollection.length; index++) {
 	priceInputs.push(priceInputsCollection[index]);
 }
 
-console.log(screenTypes);
-
-const appData = {
+/* const appData = {
 	ROLLBACK: 5,
 	title: '',
 	screens: [],
@@ -129,4 +127,4 @@ const appData = {
 	}
 }
 
-appData.start();
+appData.start(); */
