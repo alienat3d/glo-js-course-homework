@@ -29,7 +29,7 @@ for (let index = 0; index < priceInputsCollection.length; index++) {
 
 console.log(screenTypes);
 
-/* const appData = {
+const appData = {
 	ROLLBACK: 5,
 	title: '',
 	screens: [],
@@ -43,7 +43,6 @@ console.log(screenTypes);
 		do {
 			appData.title = prompt('Как называется ваш проект?', ' КаЛьКулятор Верстки');
 		} while (appData.isNumber(appData.title));
-
 
 		for (let i = 0; i < 2; i++) {
 			let name = '';
@@ -60,12 +59,17 @@ console.log(screenTypes);
 			appData.screens.push({ id: i, name, price });
 		}
 
-		for (let i = 0; i < 2; i++) {
+		for (let i = 1; i < 3; i++) {
 			let name = '';
 			let price = 0;
 
 			do {
-				name = prompt('Какой дополнительный тип услуги нужен?');
+				const answer = prompt('Какой дополнительный тип услуги нужен?');
+				if (appData.services[answer]) {
+					name = answer + '-' + i;
+				} else {
+					name = answer;
+				}
 			} while (appData.isNumber(name));
 
 			do {
@@ -76,9 +80,12 @@ console.log(screenTypes);
 		}
 	},
 	addPrices: function () {
-		for (const screen of appData.screens) {
-			appData.screenPrice += +screen.price;
-		}
+		// for (const screen of appData.screens) {
+		// 	appData.screenPrice += +screen.price;
+		// }
+		appData.screenPrice = appData.screens.reduce(function(sum, item) {
+			return sum + +item.price;
+		}, 0)
 
 		for (const price in appData.services) {
 			appData.allServicePrices += appData.services[price];
@@ -120,6 +127,6 @@ console.log(screenTypes);
 		console.log(appData.servicePercentPrice);
 		console.log(appData.screens);
 	}
-} */
+}
 
-// appData.start();
+appData.start();
