@@ -29,7 +29,7 @@
 						<h3>Расчет по типу экрана</h3>
 						<div class="main-controls__item screen">
 							<div class="main-controls__select">
-								<select name="views-select">
+								<select class="views-select" name="views-select">
 									<option value="" selected>Тип экранов</option>
 									<option value="500">Простых 500руб * n</option>
 									<option value="700">Сложных 700руб * n</option>
@@ -41,7 +41,7 @@
 								</select>
 							</div>
 							<div class="main-controls__input">
-								<input type="text" placeholder="Количество экранов">
+								<input class="views-input" type="text" placeholder="Количество экранов">
 							</div>
 						</div>
 
@@ -173,7 +173,7 @@
 					</div>
 
 					<div class="main-total__buttons">
-						<button class="handler_btn" id="start">Рассчитать</button>
+						<button class="handler_btn" id="start" disabled>Рассчитать</button>
 						<button class="handler_btn" id="reset" style="display: none;">Сброс</button>
 					</div>
 				</div>

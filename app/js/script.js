@@ -20,16 +20,11 @@ const totalCount = document.getElementsByClassName('total-input')[1];
 const totalCountOther = document.getElementsByClassName('total-input')[2];
 const fullTotalCount = document.getElementsByClassName('total-input')[3];
 const totalCountRollback = document.getElementsByClassName('total-input')[4];
-// * 2.0 Теперь нам нужно получить элементы выбора типа экрана и строку ввода. Их родительский блок мы уже получили по селектору ".screen". Теперь мы можем перебрать его содержимое и составить объект. ↓
-let screens = document.querySelectorAll('.screen');
+const screenSelects = document.getElementsByClassName('views-select');
+const screenInputs = document.getElementsByClassName('views-input');
+const screens = document.getElementsByClassName('screen');
 
-// const select = document.querySelector('.views-select');
-
-// calcBtn.disabled = false;
-
-// calcBtn.addEventListener('click', () => {
-// 	console.log('clicked');
-// })
+// [1]
 
 const appData = {
 	ROLLBACK: 10,
@@ -47,38 +42,56 @@ const appData = {
 		appData.addTitle();
 		startBtn.addEventListener('click', appData.start);
 		plusBtn.addEventListener('click', appData.addScreenBlock);
+		screenSelects[0].addEventListener('change', appData.enableBtn);
+		screenInputs[0].addEventListener('input', appData.enableBtn);
 	},
 	addTitle: function () {
-		document.title = title.textContent; // * 1 Добавит заголовок вкладки браузера сайта (<title>)
+		document.title = title.textContent;
+	},
+	enableBtn: function () {
+		let selectedIndexArray = [];
+		let inputValuesArray = [];
+
+		for (let index = 0; index < screens.length; index++) {
+			const select = document.querySelector('.views-select');
+			const input = document.querySelector('.views-input');
+			const selectedIndex = select.selectedIndex;
+			const inputValue = +input.value;
+			
+			if (selectedIndex) selectedIndexArray.push(selectedIndex);
+			if (inputValue) inputValuesArray.push(inputValue);
+
+			for (let index = 0; index < screenSelects.length; index++) {
+				select.addEventListener('change', appData.enableBtn);
+				input.addEventListener('input', appData.enableBtn);
+			}
+
+			console.log(selectedIndexArray, inputValuesArray);
+		}
+
+		if (selectedIndexArray.some(item => item === 0) || inputValuesArray.some(item => item === '')) {
+			startBtn.disabled = true;
+		} else {
+			startBtn.disabled = false;
+		}
 	},
 	start: function () {
 		appData.addScreens();
 		appData.addServices();
 		appData.addPrices();
-		// appData.ask();
-		// appData.getFullPrice();
-		// appData.getServicePercentPrice();
-		// appData.getTitle();
-		appData.logger();
 		appData.showResult();
+		// appData.logger();
 	},
-	// * 7.0 Ну и в итоге нам ещё требуется метод, который будет выводить все эти расчёты в нужные места калькулятора, назовём его "showResult()". Всего у нас 5 полей, куда нужно выводить значения и все они уже получены выше, это: "total", "totalCount", "totalCountOther", "fullTotalCount", "totalCountRollback"
 	showResult: function () {
 		total.value = appData.screenPrice;
 		totalCountOther.value = appData.servicePricesPercent + appData.servicePricesNumber;
 		fullTotalCount.value = appData.fullPrice;
 	},
-	// 2.2 Создадим новый метод, который будет заполнять объектами свойство "screens" и его же мы вызовем в методе "start()". Используя перебор forEach() мы получим дочерние select & input и занесём их в отдельные переменные.
-	// 2.3 Далее мы получим их значение — "value"
-	// 2.4 Объект "screens" состоял из свойств "id", "name" & "price". С "price" всё понятно, это кол-во экранов * на стоимость 1 экрана, id мы тоже легко находим через index. Но с "name" будет чуточку посложнее, он будет содержаться в текстовом содержимом опции, которую выбрал пользователь. Нас интересует свойство "selectedIndex", оно хранит index того элемента <option>, которое выбрал пользователь. А также есть свойство "options" с живой коллекцией элементов <option>, из которых мы можем извлечь textContent. Всё это мы занесём в отдельную переменную "selectName".
-	// 2.5 Далее мы перенесём метод "push()" из цикла for, который мы использовали в старой версии приложения.
-	// 3.3 Но для того, чтобы недавно добавленные новые экраны попадали в коллекцию надо её снова переопределить, найдя её с помощью "querySelectorAll()" вновь.
 	addScreens: function () {
-		screens = document.querySelectorAll('.screen');
-
-		screens.forEach(function (screen, index) {
-			const select = screen.querySelector('select');
-			const input = screen.querySelector('input');
+		// screens = document.querySelectorAll('.screen');
+		for (let index = 0; index < screens.length; index++) {
+			const select = screens.querySelector('select');
+			const input = screens.querySelector('input');
 			const selectName = select.options[select.selectedIndex].textContent;
 
 			appData.screens.push({
@@ -86,32 +99,34 @@ const appData = {
 				name: selectName,
 				price: select.value * +input.value
 			});
-			console.log(appData.screens);
-		});
+		}
+		// screens.forEach(function (screen, index) {
+		// 	const select = screen.querySelector('select');
+		// 	const input = screen.querySelector('input');
+		// 	const selectName = select.options[select.selectedIndex].textContent;
+
+		// 	appData.screens.push({
+		// 		id: index,
+		// 		name: selectName,
+		// 		price: select.value * +input.value
+		// 	});
+		// });
 	},
-	// * 3.0 Следующая задача это добавлять клон select'а с input'ом в блоке расчёта по типу экранов по клику на кнопку "+".
-	// 3.1 Для клонирования блока select'а возьмём коллекцию "screens", обратимся к 0-му элементу (<select>) и применим метод "cloneNode()" и не забудем передать в него "true", чтобы скопировать все вложенные элементы вместе с ним.
-	// 3.2 А после мы поместим этот новый элемент между последним блоком select'а и input'а и кнопкой "+".
-	// 3.3 Получаем последний элемент коллекции с помощью индекса "length - 1". ↑
 	addScreenBlock: function () {
 		const cloneScreen = screens[0].cloneNode(true);
 		plusBtn.insertAdjacentElement('beforebegin', cloneScreen);
-		// screens[screens.length - 1].after(cloneScreen);
+		screens[screens.length - 1].querySelector('select').addEventListener('change', appData.enableBtn);
+		screens[screens.length - 1].querySelector('input').addEventListener('input', appData.enableBtn);
 	},
-	// * 4.0 Создадим новый метод "addServices", который будет работать с полями дополнительных стоимостей в %, таких как чекбоксы и инпуты адаптация под планшеты и под мобильные. И он будет собирать информацию и записывать в свойство "services". Здесь нам нужно будет перебрать обе коллекции для тех, что с % и тех, что со значениями и записать в объекты в свойство "services".
-	// 4.1 Возьмём первую коллекцию и переберём её с помощью привычного метода forEach(), получим оба элемента со значениями в %. Здесь нам нужен чекбокс, который мы будем проверять, отмечен он или нет и добавлять в объект мы будем, только если он отмечен. Также нам понадобится label и input[type=text], где находится значение кол-ва % для расчётов.
-	// 4.2 Теперь мы можем записывать в объект "services" необходимую информацию из этих переменных. Ключом у нас будет текстовый контент "label". А с расчётом стоимости чуть сложнее — дело в том, чтобы высчитать % от стоимости вёрстки, нам нужно знать стоимость вёрстки. Конечно, мы могли бы прямо в этом метода посчитать суммарную стоимость массива "screens", но это будет не совсем верно. Ведь каждый функциональный блок должен заниматься своим делом, а "addServices" у нас для того, чтобы отдавать объекту "services" нужную информацию, а расчётами должен заниматься отдельный метод. А также логичнее будет разделить свойство "services" на "servicesPercent" & "servicesNumber". В первом будут находиться данные в виде процентов, а во втором в виде числовых значений соответственно.
 	addServices: function () {
 		optionPercentCheckboxes.forEach(function (item) {
 			const checkbox = item.querySelector('input[type=checkbox]');
 			const label = item.querySelector('label');
 			const input = item.querySelector('input[type=text]');
 
-			// 4.3 Итак, мы обратимся к объекту "servicesPercent", в виде ключа у нас будет текстовый контент элемента label, а значением введённое значение инпута. Не забудем про унарный плюс, чтобы перевести строковое значение из строки ввода в числовое.
-			// 4.4 Однако помним, что эти данные должны попадать в объект, только если чекбокс отмечен. Поэтому делаем проверку чекбокса, что его свойство "checked" имеет значение true, которое служит индикатором того, отмечен ли чекбокс или нет.
 			if (checkbox.checked) appData.servicesPercent[label.textContent] = +input.value;
 		});
-		// 4.5 Всё тоже самое мы делаем и для другого объекта servicesNumber, только изменяя откуда мы берём данные и куда кладём.
+
 		optionNumCheckboxes.forEach(function (item) {
 			const checkbox = item.querySelector('input[type=checkbox]');
 			const label = item.querySelector('label');
@@ -120,87 +135,21 @@ const appData = {
 			if (checkbox.checked) appData.servicesNumber[label.textContent] = +input.value;
 		});
 	},
-	// Метод ask() больше нам не нужен
-	// ask: function () {
-	/* 		do {
-				appData.title = prompt('Как называется ваш проект?', ' КаЛьКулятор Верстки');
-			} while (appData.isNumber(appData.title)); */
-
-	// 2.1 До этого мы использовали цикл for для составления объекта, но теперь мы можем это делать прямо из живого элементы страницы. А старый цикл пока закомментируем, а потом и удалим. ↑
-	/* for (let i = 0; i < 2; i++) {
-		let name = '';
-		let price = 0;
-
-		do {
-			name = prompt('Какие типы экранов нужно разработать?');
-		} while (appData.isNumber(name));
-
-		do {
-			price = prompt('Сколько будет стоить данная работа? (₽)');
-		} while (!appData.isNumber(price));
-
-		appData.screens.push({ id: i, name, price });
-	} */
-
-	// for (let i = 1; i < 3; i++) {
-	// 	let name = '';
-	// 	let price = 0;
-
-	// 	do {
-	// 		const answer = prompt('Какой дополнительный тип услуги нужен?');
-	// 		if (appData.services[answer]) {
-	// 			name = answer + '-' + i;
-	// 		} else {
-	// 			name = answer;
-	// 		}
-	// 	} while (appData.isNumber(name));
-
-	// 	do {
-	// 		price = prompt('Сколько будет стоить данная работа? (₽)');
-	// 	} while (!appData.isNumber(price));
-
-	// 	appData.services[name] = +price;
-	// }
-
-	// appData.adaptive = confirm('Нужна ли мобильная версия сайта?');
-	// },
-
-	// * 5.0 Но т.к. мы изменили свойство "services", то и этот метод нахождения общей суммы стоимости нам следует переделать, ведь теперь у нас два объекта, а не 1. И нам также нужно разделить те свойства, которые мы будем класть в стоимость дополнительных услуг. Теперь, вместо "allServicePrices" у нас будут два объекта: "servicePricesPercent" & "servicePricesNumber" соответственно.
 	addPrices: function () {
-		// for (const screen of appData.screens) {
-		// 	appData.screenPrice += +screen.price;
-		// }
 		appData.screenPrice = appData.screens.reduce(function (sum, item) {
 			return sum + +item.price;
 		}, 0)
 
-		// for (const price in appData.services) {
-		// 	appData.allServicePrices += appData.services[price];
-		// }
-		// 5.1 Итак, рассчитаем общую стоимость всех servicePercent для процентных значений
 		for (const key in appData.servicesNumber) {
 			appData.servicePricesNumber += appData.servicesNumber[key];
 		}
 
-		// 5.2 А затем и для процентных значений берём сумму цен на экраны и умножаем на процентное соотношение делённое на 100
 		for (const key in appData.servicesPercent) {
 			appData.servicePricesPercent += appData.screenPrice * (appData.servicesPercent[key] / 100);
 		}
 
-		// [6.1] Но только, т.к. мы разделили объект "allServicePrices" на два других, то и прибавлять к "screenPrice" нам нужно их
 		appData.fullPrice = +appData.screenPrice + appData.servicePricesNumber + appData.servicePricesPercent;
 	},
-	// isNumber: function (num) {
-	// 	return !isNaN(parseFloat(num)) && isFinite(num);
-	// },
-	// * 6.0 Осталось посчитать fullPrice, которую мы уже рассчитали здесь. Но мы лучше переместим содержимое этого метода в метод "addPrices()", где у нас происходят расчёты. ↑
-	/* 	getFullPrice: function () {
-			appData.fullPrice = +appData.screenPrice + appData.allServicePrices;
-		}, */
-	// Также больше не нужен getTitle()
-	/* 	getTitle: function () {
-			appData.title = appData.title.trim()[0].toUpperCase() + appData.title.trim().substring(1).toLowerCase();
-		}, */
 	getServicePercentPrice: function () {
 		appData.servicePercentPrice = appData.fullPrice - (appData.fullPrice * (appData.ROLLBACK / 100));
 	},
@@ -216,9 +165,6 @@ const appData = {
 		}
 	},
 	logger: function () {
-		// console.log(appData.fullPrice);
-		// console.log(appData.servicePercentPrice);
-		// console.log(appData.screens);
 		console.log(appData);
 	}
 }
