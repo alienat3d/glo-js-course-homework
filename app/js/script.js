@@ -1,7 +1,7 @@
 'use strict';
 /* 
-1) Запретить нажатие кнопки Рассчитать если не выбран ни один тип экрана в выпадающем списке и не введено их количество. Учесть что блоков с типом экранов может быть несколько, но пустых (незаполненных) элементов быть не должно
-2) Повесить на input[type=range] (в блоке с классом .rollback) обработчик события. При перемещении ползунка значение под ним (в элементе span) должно меняться. А так же это значение должно заноситься в свойство rollback нашего объекта для последующих расчетов!
+[✓] 1) Запретить нажатие кнопки Рассчитать если не выбран ни один тип экрана в выпадающем списке и не введено их количество. Учесть что блоков с типом экранов может быть несколько, но пустых (незаполненных) элементов быть не должно
+[✓] 2) Повесить на input[type=range] (в блоке с классом .rollback) обработчик события. При перемещении ползунка значение под ним (в элементе span) должно меняться. А так же это значение должно заноситься в свойство rollback нашего объекта для последующих расчетов!
 3) В нашем объекте присутствует метод getServicePercentPrice. Данный метод рассчитывает доход с учетом отката посреднику. Перенести его логику в метод addPrices и выводить в поле с подписью "Стоимость с учетом отката"
 4) В методе addScreens мы добавляем в свойство appData.screens новые объекты. Добавить свойство count в которое занести количество экранов из input. В методе addPrices посчитать общее количество экранов и вывести на страницу итоговое значение в поле с подписью "Количество экранов"
 5) Удалить из проекта метод getRollbackMessage
@@ -14,7 +14,6 @@ const plusBtn = document.querySelector('.screen-btn');
 const optionPercentCheckboxes = document.querySelectorAll('.other-items.percent');
 const optionNumCheckboxes = document.querySelectorAll('.other-items.number');
 const rollbackController = document.querySelector('.rollback input');
-const rollbackControllerValue = document.querySelector('.rollback .range-value');
 const total = document.getElementsByClassName('total-input')[0];
 const totalCount = document.getElementsByClassName('total-input')[1];
 const totalCountOther = document.getElementsByClassName('total-input')[2];
@@ -25,15 +24,17 @@ let screens = document.querySelectorAll('.screen');
 // [1]
 let screenSelects = screens[0].querySelectorAll('select');
 let screenInputs = screens[0].querySelectorAll('input');
+// [2]
+let rollbackControllerValue = document.querySelector('.rollback .range-value');
 
 const appData = {
-	ROLLBACK: 10,
 	title: '',
 	screens: [],
 	screenPrice: 0,
 	adaptive: true,
 	servicePricesPercent: 0,
 	servicePricesNumber: 0,
+	rollback: 10,
 	fullPrice: 0,
 	servicePercentPrice: 0,
 	servicesPercent: {},
@@ -46,6 +47,12 @@ const appData = {
 		});
 		// == / [1] ==
 		plusBtn.addEventListener('click', appData.addScreenBlock);
+		// == [2] ==
+		rollbackController.addEventListener('input', () => {
+			rollbackControllerValue.textContent = rollbackController.value + ' %';
+			appData.rollback = +rollbackController.value;
+		})
+		// == / [2] ==
 	},
 	addTitle: function () {
 		document.title = title.textContent;
@@ -140,7 +147,7 @@ const appData = {
 		appData.fullPrice = +appData.screenPrice + appData.servicePricesNumber + appData.servicePricesPercent;
 	},
 	getServicePercentPrice: function () {
-		appData.servicePercentPrice = appData.fullPrice - (appData.fullPrice * (appData.ROLLBACK / 100));
+		appData.servicePercentPrice = appData.fullPrice - (appData.fullPrice * (appData.rollback / 100));
 	},
 	getRollbackMessage: function (price) {
 		if (price >= 30000) {
