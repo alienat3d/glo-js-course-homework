@@ -140,7 +140,7 @@ button {
     background-color: lighten($color: #a52a2a, $amount: 5%);
   }
 
-  &:disabled {
+  .disabled {
     background-color: #999;
   }
 }

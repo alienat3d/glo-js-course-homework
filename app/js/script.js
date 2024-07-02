@@ -20,11 +20,11 @@ const totalCount = document.getElementsByClassName('total-input')[1];
 const totalCountOther = document.getElementsByClassName('total-input')[2];
 const fullTotalCount = document.getElementsByClassName('total-input')[3];
 const totalCountRollback = document.getElementsByClassName('total-input')[4];
-const screenSelects = document.getElementsByClassName('views-select');
-const screenInputs = document.getElementsByClassName('views-input');
-const screens = document.getElementsByClassName('screen');
 
+let screens = document.querySelectorAll('.screen');
 // [1]
+let screenSelects = screens[0].querySelectorAll('select');
+let screenInputs = screens[0].querySelectorAll('input');
 
 const appData = {
 	ROLLBACK: 10,
@@ -38,43 +38,35 @@ const appData = {
 	servicePercentPrice: 0,
 	servicesPercent: {},
 	servicesNumber: {},
-	init: function () {
+	init() {
 		appData.addTitle();
-		startBtn.addEventListener('click', appData.start);
+		// == [1] ==
+		startBtn.addEventListener('click', () => {
+			if (appData.checkFields(screenSelects, screenInputs)) appData.start();
+		});
+		// == / [1] ==
 		plusBtn.addEventListener('click', appData.addScreenBlock);
-		screenSelects[0].addEventListener('change', appData.enableBtn);
-		screenInputs[0].addEventListener('input', appData.enableBtn);
 	},
 	addTitle: function () {
 		document.title = title.textContent;
 	},
-	enableBtn: function () {
-		let selectedIndexArray = [];
-		let inputValuesArray = [];
+	// == [1] ==
+	checkFields(selects, inputs) {
+		let error = false;
 
-		for (let index = 0; index < screens.length; index++) {
-			const select = document.querySelector('.views-select');
-			const input = document.querySelector('.views-input');
-			const selectedIndex = select.selectedIndex;
-			const inputValue = +input.value;
-			
-			if (selectedIndex) selectedIndexArray.push(selectedIndex);
-			if (inputValue) inputValuesArray.push(inputValue);
+		inputs.forEach(input => {
+			if (input.value === '') error = true;
+			console.log(error);
+		});
 
-			for (let index = 0; index < screenSelects.length; index++) {
-				select.addEventListener('change', appData.enableBtn);
-				input.addEventListener('input', appData.enableBtn);
-			}
+		selects.forEach(select => {
+			if (select.selectedIndex === 0) error = true;
+			console.log(error);
+		});
 
-			console.log(selectedIndexArray, inputValuesArray);
-		}
-
-		if (selectedIndexArray.some(item => item === 0) || inputValuesArray.some(item => item === '')) {
-			startBtn.disabled = true;
-		} else {
-			startBtn.disabled = false;
-		}
+		return !error;
 	},
+	// == / [1] ==
 	start: function () {
 		appData.addScreens();
 		appData.addServices();
@@ -88,10 +80,11 @@ const appData = {
 		fullTotalCount.value = appData.fullPrice;
 	},
 	addScreens: function () {
-		// screens = document.querySelectorAll('.screen');
-		for (let index = 0; index < screens.length; index++) {
-			const select = screens.querySelector('select');
-			const input = screens.querySelector('input');
+		screens = document.querySelectorAll('.screen');
+
+		screens.forEach(function (screen, index) {
+			const select = screen.querySelector('select');
+			const input = screen.querySelector('input');
 			const selectName = select.options[select.selectedIndex].textContent;
 
 			appData.screens.push({
@@ -99,24 +92,18 @@ const appData = {
 				name: selectName,
 				price: select.value * +input.value
 			});
-		}
-		// screens.forEach(function (screen, index) {
-		// 	const select = screen.querySelector('select');
-		// 	const input = screen.querySelector('input');
-		// 	const selectName = select.options[select.selectedIndex].textContent;
-
-		// 	appData.screens.push({
-		// 		id: index,
-		// 		name: selectName,
-		// 		price: select.value * +input.value
-		// 	});
-		// });
+		});
 	},
 	addScreenBlock: function () {
 		const cloneScreen = screens[0].cloneNode(true);
+		cloneScreen.querySelector('input').value = '';
 		plusBtn.insertAdjacentElement('beforebegin', cloneScreen);
-		screens[screens.length - 1].querySelector('select').addEventListener('change', appData.enableBtn);
-		screens[screens.length - 1].querySelector('input').addEventListener('input', appData.enableBtn);
+
+		// == [1] ==
+		screens = document.querySelectorAll('.screen');
+		screenSelects = document.querySelectorAll('.screen select');
+		screenInputs = document.querySelectorAll('.screen input');
+		// == / [1] ==
 	},
 	addServices: function () {
 		optionPercentCheckboxes.forEach(function (item) {
@@ -165,7 +152,7 @@ const appData = {
 		}
 	},
 	logger: function () {
-		console.log(appData);
+		console.log('click');
 	}
 }
 
