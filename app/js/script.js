@@ -51,12 +51,14 @@ const appData = {
 		document.title = title.textContent;
 	},
 	// == [1] ==
-	checkFields(selects, inputs) {
+	isNumber: function (num) {
+		return !isNaN(parseFloat(num)) && isFinite(num);
+	},
+	checkFields: function(selects, inputs) {
 		let error = false;
 
 		inputs.forEach(input => {
-			if (input.value === '') error = true;
-			console.log(error);
+			if (input.value === '' || input.value <= 0 || !appData.isNumber(input.value)) error = true;
 		});
 
 		selects.forEach(select => {
