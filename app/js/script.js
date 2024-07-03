@@ -3,8 +3,8 @@
 [✓] 1) Запретить нажатие кнопки Рассчитать если не выбран ни один тип экрана в выпадающем списке и не введено их количество. Учесть что блоков с типом экранов может быть несколько, но пустых (незаполненных) элементов быть не должно
 [✓] 2) Повесить на input[type=range] (в блоке с классом .rollback) обработчик события. При перемещении ползунка значение под ним (в элементе span) должно меняться. А так же это значение должно заноситься в свойство rollback нашего объекта для последующих расчетов!
 [✓] 3) В нашем объекте присутствует метод getServicePercentPrice. Данный метод рассчитывает доход с учетом отката посреднику. Перенести его логику в метод addPrices и выводить в поле с подписью "Стоимость с учетом отката"
-4) В методе addScreens мы добавляем в свойство appData.screens новые объекты. Добавить свойство count в которое занести количество экранов из input. В методе addPrices посчитать общее количество экранов и вывести на страницу итоговое значение в поле с подписью "Количество экранов"
-5) Удалить из проекта метод getRollbackMessage
+[✓] 4) В методе addScreens мы добавляем в свойство appData.screens новые объекты. Добавить свойство count в которое занести количество экранов из input. В методе addPrices посчитать общее количество экранов и вывести на страницу итоговое значение в поле с подписью "Количество экранов"
+[✓] 5) Удалить из проекта метод getRollbackMessage
 */
 
 const title = document.getElementsByTagName('h1')[0];
@@ -28,6 +28,7 @@ let screenInputs = screens[0].querySelectorAll('input');
 const appData = {
 	title: '',
 	screens: [],
+	screensCount: 0,
 	screenPrice: 0,
 	adaptive: true,
 	servicePricesPercent: 0,
@@ -68,7 +69,6 @@ const appData = {
 
 		selects.forEach(select => {
 			if (select.selectedIndex === 0) error = true;
-			console.log(error);
 		});
 
 		return !error;
@@ -84,7 +84,13 @@ const appData = {
 	showResult: function () {
 		total.value = appData.screenPrice;
 		totalCountOther.value = appData.servicePricesPercent + appData.servicePricesNumber;
-		fullTotalCount.value = appData.fullPrice;
+		fullTotalCount.value = appData.fullPrice;		
+		// == [3] ==
+		totalCountRollback.value = appData.servicePercentPrice;
+		// == / [3] ==
+		// == [4] ==
+		totalCount.value = appData.screensCount;
+		// == / [4] ==
 	},
 	addScreens: function () {
 		screens = document.querySelectorAll('.screen');
@@ -97,7 +103,8 @@ const appData = {
 			appData.screens.push({
 				id: index,
 				name: selectName,
-				price: select.value * +input.value
+				price: select.value * +input.value,
+				count: +input.value
 			});
 		});
 	},
@@ -134,6 +141,10 @@ const appData = {
 			return sum + +item.price;
 		}, 0)
 
+		appData.screensCount = appData.screens.reduce(function (sum, item) {
+			return sum + +item.count;
+		}, 0)
+
 		for (const key in appData.servicesNumber) {
 			appData.servicePricesNumber += appData.servicesNumber[key];
 		}
@@ -145,23 +156,22 @@ const appData = {
 		appData.fullPrice = +appData.screenPrice + appData.servicePricesNumber + appData.servicePricesPercent;
 		
 		appData.servicePercentPrice = appData.fullPrice - (appData.fullPrice * (appData.rollback / 100));
-		// == [3] ==
-		totalCountRollback.value = appData.servicePercentPrice;
-		// == / [3] ==
 	},
-	getRollbackMessage: function (price) {
-		if (price >= 30000) {
-			return "Даем скидку в 10%";
-		} else if (price >= 15000 && price < 30000) {
-			return "Даем скидку в 5%";
-		} else if (price >= 0 && price < 15000) {
-			return "Скидка не предусмотрена";
-		} else {
-			return "Что-то пошло не так";
-		}
-	},
+	// == [5] ==
+	// getRollbackMessage: function (price) {
+	// 	if (price >= 30000) {
+	// 		return "Даем скидку в 10%";
+	// 	} else if (price >= 15000 && price < 30000) {
+	// 		return "Даем скидку в 5%";
+	// 	} else if (price >= 0 && price < 15000) {
+	// 		return "Скидка не предусмотрена";
+	// 	} else {
+	// 		return "Что-то пошло не так";
+	// 	}
+	// },
+	// == / [5] ==
 	logger: function () {
-		console.log('click');
+		// console.log('click');
 	}
 }
 
