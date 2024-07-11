@@ -4,12 +4,12 @@
 
 /* Что необходимо реализовать (первые 2 пункта делаем по видео (последние минуты 2-го видео 13-го урока)):
 
-Отмечать выполненные дела, выполненные дела должны перемещаться в блок с выполненными делами
-Поле ввода после добавления дела должно очищаться
-Пустые дела добавляться не должны
-Удаление дел на кнопку КОРЗИНА
-Сохранять данные о делах в localStorage (советую в виде массива)
-Дела из localStorage подгружаться должны автоматически при загрузки странице
+[✓] Отмечать выполненные дела, выполненные дела должны перемещаться в блок с выполненными делами
+[✓] Поле ввода после добавления дела должно очищаться
+[✓] Пустые дела добавляться не должны
+[✓] Удаление дел на кнопку КОРЗИНА
+[✓] Сохранять данные о делах в localStorage (советую в виде массива)
+[✓] Дела из localStorage подгружаться должны автоматически при загрузки странице
 
 внимание чтобы сохранить массив в localStorage необходимо его конвертировать в json формат (JSON.stringify)
 
@@ -23,18 +23,21 @@ const todoList = document.querySelector('.todo-list');
 const todoCompleted = document.querySelector('.todo-completed');
 
 let toDoData = [];
-let data = [];
 
-const render = function () {
-
-	todoList.innerHTML = '';
-	todoCompleted.innerHTML = '';
-
+if (localStorage.length > 0) {
 	for (let index = 0; index < localStorage.length; index++) {
 		toDoData.push(JSON.parse(localStorage.getItem('note #' + index)));
 	}
+}
 
-	console.log(toDoData);
+const renewLocalStorage = () => {
+	localStorage.clear();
+	toDoData.forEach((obj, idx) => localStorage.setItem('note #' + idx, JSON.stringify(obj)));
+}
+
+const render = function () {
+	todoList.innerHTML = '';
+	todoCompleted.innerHTML = '';
 
 	toDoData.forEach(function (item) {
 		const li = document.createElement('li');
@@ -47,22 +50,22 @@ const render = function () {
 				<button class="todo-remove"></button>
 				<button class="todo-complete"></button>
 			</div>
-		`
-		if (item.completed) {
-			todoCompleted.append(li);
-		} else {
-			todoList.append(li);
-		}
+		`;
+
+		item.completed ? todoCompleted.append(li) : todoList.append(li);
 
 		li.querySelector('.todo-complete')
 			.addEventListener('click', function () {
 				item.completed = !item.completed;
+				renewLocalStorage();
 				render();
 			});
 
 		li.querySelector('.todo-remove')
-			.addEventListener('click', function (evt) {
-				localStorage.removeItem('note #' + evt.target.closest('li').dataset.num);
+			.addEventListener('click', function () {
+				const itemIndex = toDoData.indexOf(item);
+				toDoData.splice(itemIndex, 1);
+				renewLocalStorage();
 				render();
 			});
 	});
@@ -80,17 +83,13 @@ todoControl.addEventListener('submit', function (evt) {
 		if (toDoData.length > 0) {
 			const idPlusOne = toDoData[toDoData.length - 1].id + 1;
 			newToDo.id = idPlusOne;
+		} else {
+			newToDo.id = 0;
 		}
 		toDoData.push(newToDo);
 
-		localStorage.clear();
-
-		toDoData.forEach(function (obj, idx) {
-			localStorage.setItem('note #' + idx, JSON.stringify(obj));
-		});
-
 		headerInput.value = '';
-
+		renewLocalStorage();
 		render();
 	}
 })
