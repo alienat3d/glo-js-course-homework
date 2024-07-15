@@ -1,0 +1,10 @@
+body {
+	background-color: #232323;
+	color: #ccc;
+}
+#city{
+  display: none;
+}
+.result{
+  margin: 15px 0;
+}
