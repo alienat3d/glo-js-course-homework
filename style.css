@@ -1,0 +1,58 @@
+body {
+	background-color: #232323;
+	color: #eee;
+	font-size: 20px;
+	user-select: none;
+}
+
+label {
+	margin: 7px 0;
+	display: block;
+	font-size: 22px;
+	cursor: pointer;
+}
+
+[for="children"],
+[id="driver-fieldset"],
+[for="own-cars"],
+[for="programming-languages"],
+[id="developer-fieldset"] {
+	display: none;
+}
+
+input {
+	padding: 10px 12px 8px;
+	font-size: 22px;
+}
+
+select {
+	margin: 7px 0;
+	font-size: 22px;
+}
+
+[type="submit"] {
+	cursor: pointer;
+	display: block;
+	border-radius: 15px;
+	text-align: center;
+	margin: 10px 0;
+	padding: 10px 35px;
+	font-size: 20px;
+	background-color: yellow;
+}
+
+table,
+th,
+td {
+	border: 1px solid #aaa;
+	border-collapse: collapse;
+	font-size: 25px;
+}
+
+table {
+	width: 100%;
+}
+
+tbody {
+	text-align: right;
+}

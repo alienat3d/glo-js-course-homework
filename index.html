@@ -6,14 +6,94 @@
 	<meta name="viewport"
 		content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	
-	<title>Обычная домашка (GLO JS Course)</title>
-	
+
+	<title>Веб-приложение для управления сущностями (GLO JS Course)</title>
+
 	<script src="script.js" defer></script>
+	<link href="style.css" rel="stylesheet">
 </head>
 
 <body>
-
+	<h1>Веб-приложение для управления сущностями (GLO JS Course)</h1>
+	<form action='/'>
+		<fieldset>
+			<label for="first-name">Введите имя сотрудника\-цы: <input id="first-name" type="text" name="first-name"
+					required /></label>
+			<label for="last-name">Введите фамилию сотрудника\-цы: <input id="last-name" type="text" name="last-name"
+					required /></label>
+			<label for="birth-date">Введите дату рождения сотрудника\-цы (формат: "полный год-месяц-день"): <input
+					id="birth-date" type="text" name="birth-date" required /></label>
+		</fieldset>
+		<fieldset>
+			<label for="is-married">
+				<input class="inline" id="is-married" type="checkbox" name="is-married" /> Женат \ За мужем
+			</label>
+			<label for="children">
+				Дети (формат: "имя 1, имя 2, ..."):
+				<input class="inline" id="children" type="text" name="children" />
+			</label>
+		</fieldset>
+		<fieldset>
+			<select id="position" name="position" required>
+				<option value="">Выберете должность сотрудника</option>
+				<option value="driver">Водитель</option>
+				<option value="developer">Разработчик</option>
+			</select>
+			<label for="hired-date">Поступил\-а на работу (формат: "полный год-месяц-день"): <input id="hired-date"
+					type="text" name="hired-date" required /></label>
+			<label for="grade">Уровень компетенций: <input id="grade" type="text" name="grade" required /></label>
+		</fieldset>
+		<fieldset id="driver-fieldset">
+			<label for="driver-experience">Опыт вождения: <input id="driver-experience" type="number" name="driver-experience"
+					required /></label>
+			<label for="work-car-make">Рабочий автомобиль: <input id="work-car-make" type="text" name="work-car-make"
+					required /></label>
+			<label for="has-own-car"><input id="has-own-car" type="checkbox" name="has-own-car" required /> Есть
+				собственный\-е автомобиль\-и</label>
+			<label for="own-cars">Собственный\-е автомобиль\-и: (формат: "марка (тип) 1, марка (тип) 2, ..."): <input id="own-cars"
+					type="text" name="own-cars" required /></label>
+		</fieldset>
+		<label for="programming-languages">Знаю язык\-и программирования: (формат: "ЯП 1, ЯП 2, ..."): <input
+			id="programming-languages" type="text" name="programming-languages" required /></label>
+		<fieldset id="developer-fieldset">
+			<legend>Выберете тип трудоустройства</legend>
+			<label for="in-office-staff">
+				<input id="in-office-staff" type="radio" name="employment-type" /> Штатный сотрудник
+			</label>
+			<label for="remote-staff">
+				<input id="remote-staff" type="radio" name="employment-type" /> Штатный сотрудник на удалёнке
+			</label>
+			<label for="freelancer">
+				<input id="freelancer" type="radio" name="employment-type" /> Фрилансер
+			</label>
+		</fieldset>
+		<input type="submit" value="Сохранить" />
+	</form>
+	<table>
+		<thead>
+			<tr>
+				<th>Должность</th>
+				<th>Имя</th>
+				<th>Фамилия</th>
+				<th>Дата рождения</th>
+				<th>Семейное положение</th>
+				<th>Дети</th>
+				<th>Уровень компетенций</th>
+				<th>Дата трудоустройства</th>
+				<th>Удалить</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+			</tr>
+		</tbody>
+		<!-- 		<tfoot>
+			<tr>
+				<td></td>
+				<td></td>
+			</tr>
+		</tfoot> -->
+	</table>
 </body>
 
 </html>
