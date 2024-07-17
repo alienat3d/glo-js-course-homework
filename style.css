@@ -13,11 +13,23 @@ label {
 }
 
 [for="children"],
-[id="driver-fieldset"],
+#driver-grade,
+#developer-grade,
+#driver-licenses,
+#driver-fieldset,
 [for="own-cars"],
-[for="programming-languages"],
-[id="developer-fieldset"] {
+.programming-languages,
+#developer-fieldset {
 	display: none;
+}
+
+#driver-licenses label {
+	margin-right: 10px;
+	display: inline-block;
+}
+
+#driver-licenses input {
+	cursor: pointer;
 }
 
 input {
