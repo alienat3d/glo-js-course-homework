@@ -15,19 +15,24 @@
 Под формой - кнопка "Сохранить". Поля формы должны быть обязательные для отправки.
 Таблица: на каждое свойство по колонке, последняя дополнительная колонка имеет кнопку "Удалить" .
 [✓] 3) При Сохранении данных из формы создаем объект на основе выбранного класса-наследника. Записываем каждую сущность в единый массив.
-[] 4) Данные из объектов в массиве должны сохраняться в localStorage и выводиться на страницу в таблице
-[] 5) При обновлении страницы данные должны сохраняться
+[✓] 4) Данные из объектов в массиве должны сохраняться в localStorage и выводиться на страницу в таблице
+[✓] 5) При обновлении страницы данные должны сохраняться
 [] 6) При нажатии кнопки "Удалить" данный объект должен быть удален из массива данных, со страницы и с localStorage. Для удаления использовать метод класса!
 */
-
+/* document.querySelector('.table-del-btn').addEventListener('click', () => {
+			const itemIndex = employeesArray.indexOf(object);
+			employeesArray.splice(itemIndex, 1);
+			renewLocalStorage();
+			renderTable();
+		}) */
 const inputsCollection = document.querySelectorAll('input[type="text"]');
-const inputsNumCollection = document.querySelectorAll('input[type="number"]');
 const selectEmployeePosition = document.getElementById('position');
 const isMarriedCheckbox = document.getElementById('is-married');
 const childrenLabel = document.querySelector('[for="children"]');
 const driverGradeFieldset = document.getElementById('driver-grade');
 const driverGrades = driverGradeFieldset.querySelectorAll('input[type="radio"]');
 const driverFieldset = document.getElementById('driver-fieldset');
+const driverExperienceInput = driverFieldset.querySelector('input[type="number"]');
 const developerGradeFieldset = document.getElementById('developer-grade');
 const developerGrades = developerGradeFieldset.querySelectorAll('input[type="radio"]');
 const driverLicenseFieldset = document.getElementById('driver-licenses');
@@ -37,13 +42,41 @@ const developerFieldset2 = document.getElementById('developer-fieldset');
 const employmentTypes = developerFieldset2.querySelectorAll('input[type="radio"]');
 const hasOwnCarCheckbox = document.getElementById('has-own-car');
 const ownCarsLabel = document.querySelector('[for="own-cars"]');
-const ownCarsInput = ownCarsLabel.querySelector('input');
 const saveBtn = document.querySelector('[type="submit"]');
-// const deleteBtn = document.querySelector('.table-del-btn');
 const tableBody = document.querySelector('tbody');
-console.log(inputsCollection);
-let developersArray = [];
-let driversArray = [];
+
+let employeesArray = [];
+
+if (localStorage.length > 0) {
+	for (let idx = 0; idx < localStorage.length; idx++) {
+		employeesArray.push(JSON.parse(localStorage.getItem('employee #' + (idx + 1))));
+	}
+}
+const renewLocalStorage = () => {
+	localStorage.clear();
+	employeesArray.forEach((obj, idx) => localStorage.setItem('employee #' + (idx + 1), JSON.stringify(obj)));
+}
+
+const clearInputs = () => {
+	inputsCollection.forEach(input => input.value = '');
+	driverExperienceInput.value = '';
+	selectEmployeePosition.selectedIndex = 0;
+	isMarriedCheckbox.checked = false;
+	childrenLabel.querySelector('input').value = '';
+	driverGrades.forEach(radio => {
+		if (radio.checked) radio.checked = false;
+	});
+	driverLicenseCheckboxes.forEach(checkbox => {
+		if (checkbox.checked) checkbox.checked = false;
+	});
+	hasOwnCarCheckbox.checked = false;
+	developerGrades.forEach(radio => {
+		if (radio.checked) radio.checked = false;
+	});
+	employmentTypes.forEach(radio => {
+		if (radio.checked) radio.checked = false;
+	});
+}
 
 const showElem = (elem, prop = 'inline') => elem.style.display = prop;
 const hideElem = (elem) => elem.style.display = 'none';
@@ -54,53 +87,52 @@ const ifCheckedShow = (checkbox, elemToShow) => {
 }
 const dateToLocaleFormat = (str) => new Date(str).toLocaleDateString('ru');
 const booleanToWords = (prop) => prop ? 'да' : 'нет';
-const fillingTable = (object) => {
-	if (selectEmployeePosition.value === 'driver') {
-		tableBody.insertAdjacentHTML('beforeend', `
-<tr>
-	<td>${object._position}</td>
-	<td>${object.firstName !== '' ? object.firstName : '-'}</td>
-	<td>${object.lastName !== '' ? object.lastName : '-'}</td>
-	<td>${object.birthDate ? dateToLocaleFormat(object.birthDate) : '-'}</td>
-	<td>${booleanToWords(object.isMarried)}</td>
-	<td>${object.children[0] !== '' ? object.children.join(', ') : 'нет'}</td>
-	<td>${object.grade !== '' ? object.grade : '-'}</td>
-	<td>${object.hiredDate ? dateToLocaleFormat(object.hiredDate) : '-'}</td>
-	<td class="table-driver">${object.driverLicenses === '' ? object.driverLicenses.join(', ') : '-'}</td>
-	<td class="table-driver">${object.driverExperience !== '' ? object.driverExperience : '-'}</td>
-	<td class="table-driver">${object.workСarMake !== '' ? object.workСarMake : 'нет'}</td>
-	<td class="table-driver">${object.ownCars[0] !== '' ? object.ownCars.join(', ') : 'нет'}</td>
-	<td class="table-developer">-</td>
-	<td class="table-developer">-</td>
-	<td><button class="table-del-btn"></button></td>
-</tr>
-		`);
-	} else if (selectEmployeePosition.value === 'developer') {
-		tableBody.insertAdjacentHTML('beforeend', `
-<tr>
-	<td>${object._position}</td>
-	<td>${object.firstName !== '' ? object.firstName : '-'}</td>
-	<td>${object.lastName !== '' ? object.lastName : '-'}</td>
-	<td>${object.birthDate ? dateToLocaleFormat(object.birthDate) : '-'}</td>
-	<td>${booleanToWords(object.isMarried)}</td>
-	<td>${object.children[0] !== '' ? object.children.join(', ') : 'нет'}</td>
-	<td>${object.grade !== '' ? object.grade : '-'}</td>
-	<td>${object.hiredDate ? dateToLocaleFormat(object.hiredDate) : '-'}</td>
-	<td class="table-driver">-</td>
-	<td class="table-driver">-</td>
-	<td class="table-driver">-</td>
-	<td class="table-driver">-</td>
-	<td class="table-developer">${object.programmingLanguages[0] !== '' ? object.programmingLanguages.join(', ') : '-'}</td>
-	<td class="table-developer">${object.employmentType !== undefined ? object.employmentType : '-'}</td>
-	<td><button class="table-del-btn"></button></td>
-</tr>
-		`);
-	}
-	const btn = document.querySelector('.table-del-btn');
-	console.log(btn);
-	btn.addEventListener('click', (evt) => {
-		evt.target.closest('tr').remove();
-	})
+
+const renderTable = () => {
+	tableBody.innerHTML = '';
+	employeesArray.forEach((object, idx) => {
+		if (object._position === 'Водитель') {
+			tableBody.insertAdjacentHTML('beforeend', `
+	<tr>
+		<td>${object._position}</td>
+		<td>${object._firstName !== '' ? object._firstName : '-'}</td>
+		<td>${object._lastName !== '' ? object._lastName : '-'}</td>
+		<td>${object._birthDate ? dateToLocaleFormat(object._birthDate) : '-'}</td>
+		<td>${booleanToWords(object._isMarried)}</td>
+		<td>${object._children[0] !== '' ? object._children.join(', ') : 'нет'}</td>
+		<td>${object._grade !== '' ? object._grade : '-'}</td>
+		<td>${object._hiredDate ? dateToLocaleFormat(object._hiredDate) : '-'}</td>
+		<td class="table-driver">${object._driverLicenses === '' ? object._driverLicenses.join(', ') : '-'}</td>
+		<td class="table-driver">${object._driverExperience !== '' ? object._driverExperience : '-'}</td>
+		<td class="table-driver">${object._workСarMake !== '' ? object._workСarMake : 'нет'}</td>
+		<td class="table-driver">${object._ownCars[0] !== '' ? object._ownCars.join(', ') : 'нет'}</td>
+		<td class="table-developer">-</td>
+		<td class="table-developer">-</td>
+		<td><button class="table-del-btn"></button></td>
+	</tr>
+			`);
+		} else if (object._position === 'Разработчик') {
+			tableBody.insertAdjacentHTML('beforeend', `
+	<tr>
+		<td>${object._position}</td>
+		<td>${object._firstName !== '' ? object._firstName : '-'}</td>
+		<td>${object._lastName !== '' ? object._lastName : '-'}</td>
+		<td>${object._birthDate ? dateToLocaleFormat(object._birthDate) : '-'}</td>
+		<td>${booleanToWords(object._isMarried)}</td>
+		<td>${object._children[0] !== '' ? object._children.join(', ') : 'нет'}</td>
+		<td>${object._grade !== '' ? object._grade : '-'}</td>
+		<td>${object._hiredDate ? dateToLocaleFormat(object._hiredDate) : '-'}</td>
+		<td class="table-driver">-</td>
+		<td class="table-driver">-</td>
+		<td class="table-driver">-</td>
+		<td class="table-driver">-</td>
+		<td class="table-developer">${object._programmingLanguages[0] !== '' ? object._programmingLanguages.join(', ') : '-'}</td>
+		<td class="table-developer">${object._employmentType !== undefined ? object._employmentType : '-'}</td>
+		<td><button class="table-del-btn"></button></td>
+	</tr>
+			`);
+		}
+	});
 }
 
 class Employee {
@@ -112,15 +144,6 @@ class Employee {
 		this._children = children;
 		this._grade = grade;
 		this._hiredDate = hiredDate;
-		Employee.incrementCount();
-	}
-
-	static count = 0;
-	static getCount() {
-		return Employee.count;
-	}
-	static incrementCount() {
-		Employee.count++;
 	}
 
 	get firstName() {
@@ -165,9 +188,6 @@ class Employee {
 	set grade(str) {
 		this.grade = str;
 	}
-	/* 	delete() {
-	
-		} */
 }
 
 class Driver extends Employee {
@@ -232,11 +252,9 @@ class Developer extends Employee {
 		this.employmentType = str;
 	}
 }
-isMarriedCheckbox.addEventListener('change', () =>
-	ifCheckedShow(isMarriedCheckbox, childrenLabel));
+
 hasOwnCarCheckbox.addEventListener('change', () =>
 	ifCheckedShow(hasOwnCarCheckbox, ownCarsLabel));
-
 selectEmployeePosition.addEventListener('change', () => {
 	if (selectEmployeePosition.value === 'driver') {
 		showElem(driverFieldset, 'block');
@@ -257,8 +275,9 @@ selectEmployeePosition.addEventListener('change', () => {
 
 saveBtn.addEventListener('click', (evt) => {
 	evt.preventDefault();
+	// Employee.incrementCount();
 	if (selectEmployeePosition.value === 'driver') {
-		const driver = new Driver(inputsCollection[0].value, inputsCollection[1].value, inputsCollection[2].value, isMarriedCheckbox.checked, [], '', inputsCollection[4].value, [], inputsNumCollection[0].value, inputsCollection[5].value, hasOwnCarCheckbox.checked, []);
+		const driver = new Driver(inputsCollection[0].value, inputsCollection[1].value, inputsCollection[2].value, isMarriedCheckbox.checked, [], '', inputsCollection[4].value, [], driverExperienceInput.value, inputsCollection[5].value, hasOwnCarCheckbox.checked, []);
 		driver._children = inputsCollection[3].value.split(', ');
 		driverGrades.forEach(option => {
 			if (option.checked) driver._grade = option.labels[0].innerText.trim();
@@ -269,9 +288,8 @@ saveBtn.addEventListener('click', (evt) => {
 				driver._driverLicenses.push(checkBoxLabel);
 			}
 		});
-		driver._ownCars = ownCarsInput.value.split(', ');
-		fillingTable(driver);
-		driversArray.push(driver);
+		driver._ownCars = inputsCollection[6].value.split(', ');
+		employeesArray.push(driver);
 	} else if (selectEmployeePosition.value === 'developer') {
 		const developer = new Developer(inputsCollection[0].value, inputsCollection[1].value, inputsCollection[2].value, isMarriedCheckbox.checked, [], '', inputsCollection[4].value, []);
 		if (developer._children[0] !== '') developer._children = inputsCollection[3].value.split(', ');
@@ -282,8 +300,11 @@ saveBtn.addEventListener('click', (evt) => {
 		employmentTypes.forEach(option => {
 			if (option.checked) developer._employmentType = option.labels[0].innerText.trim();
 		});
-		fillingTable(developer);
-		developersArray.push(developer);
-		console.log(developersArray);
+		employeesArray.push(developer);
 	}
+	clearInputs();
+	renewLocalStorage();
+	renderTable();
 })
+
+renderTable();

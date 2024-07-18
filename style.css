@@ -2,6 +2,9 @@ body {
 	background-color: #232323;
 	color: #eee;
 	font-size: 20px;
+}
+
+form {
 	user-select: none;
 }
 
@@ -12,7 +15,6 @@ label {
 	cursor: pointer;
 }
 
-[for="children"],
 #driver-grade,
 #developer-grade,
 #driver-licenses,
