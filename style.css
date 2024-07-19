@@ -1,6 +1,6 @@
 body {
-	background-color: #232323;
-	color: #eee;
+	background-color: #eee;
+	color: #232323;
 	font-size: 20px;
 }
 
@@ -25,12 +25,12 @@ label {
 	display: none;
 }
 
-.table-driver{
-	color: beige;
+.table-driver {
+	color: #191ba6;
 }
 
-.table-developer{
-	color: rgb(203, 225, 244);
+.table-developer {
+	color: #531599;
 }
 
 #driver-licenses label {
@@ -60,7 +60,8 @@ select {
 	margin: 10px 0;
 	padding: 10px 35px;
 	font-size: 20px;
-	background-color: yellow;
+	background-color: slateblue;
+	color: #eee;
 }
 
 table,
@@ -99,4 +100,22 @@ th:last-of-type {
 	height: 25px;
 	vertical-align: middle;
 	background: url('delete-button.svg') no-repeat center/contain;
+}
+
+@media (prefers-color-scheme: dark) {
+	body {
+		background-color: #232323;
+		color: #eee;
+	}
+	.table-driver {
+		color: beige;
+	}
+	
+	.table-developer {
+		color: rgb(203, 225, 244);
+	}
+	[type="submit"] {
+		background-color: yellow;
+		color: #232323;
+	}
 }

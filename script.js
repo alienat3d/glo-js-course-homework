@@ -19,12 +19,7 @@
 [✓] 5) При обновлении страницы данные должны сохраняться
 [] 6) При нажатии кнопки "Удалить" данный объект должен быть удален из массива данных, со страницы и с localStorage. Для удаления использовать метод класса!
 */
-/* document.querySelector('.table-del-btn').addEventListener('click', () => {
-			const itemIndex = employeesArray.indexOf(object);
-			employeesArray.splice(itemIndex, 1);
-			renewLocalStorage();
-			renderTable();
-		}) */
+
 const inputsCollection = document.querySelectorAll('input[type="text"]');
 const selectEmployeePosition = document.getElementById('position');
 const isMarriedCheckbox = document.getElementById('is-married');
@@ -45,6 +40,7 @@ const ownCarsLabel = document.querySelector('[for="own-cars"]');
 const saveBtn = document.querySelector('[type="submit"]');
 const tableBody = document.querySelector('tbody');
 
+let delBtns;
 let employeesArray = [];
 
 if (localStorage.length > 0) {
@@ -76,6 +72,13 @@ const clearInputs = () => {
 	employmentTypes.forEach(radio => {
 		if (radio.checked) radio.checked = false;
 	});
+	hideElem(driverGradeFieldset);
+	hideElem(driverLicenseFieldset);
+	hideElem(driverFieldset);
+	hideElem(ownCarsLabel);
+	hideElem(developerGradeFieldset);
+	hideElem(developerFieldset1);
+	hideElem(developerFieldset2);
 }
 
 const showElem = (elem, prop = 'inline') => elem.style.display = prop;
@@ -90,48 +93,59 @@ const booleanToWords = (prop) => prop ? 'да' : 'нет';
 
 const renderTable = () => {
 	tableBody.innerHTML = '';
-	employeesArray.forEach((object, idx) => {
+	employeesArray.forEach(object => {
 		if (object._position === 'Водитель') {
 			tableBody.insertAdjacentHTML('beforeend', `
-	<tr>
-		<td>${object._position}</td>
-		<td>${object._firstName !== '' ? object._firstName : '-'}</td>
-		<td>${object._lastName !== '' ? object._lastName : '-'}</td>
-		<td>${object._birthDate ? dateToLocaleFormat(object._birthDate) : '-'}</td>
-		<td>${booleanToWords(object._isMarried)}</td>
-		<td>${object._children[0] !== '' ? object._children.join(', ') : 'нет'}</td>
-		<td>${object._grade !== '' ? object._grade : '-'}</td>
-		<td>${object._hiredDate ? dateToLocaleFormat(object._hiredDate) : '-'}</td>
-		<td class="table-driver">${object._driverLicenses === '' ? object._driverLicenses.join(', ') : '-'}</td>
-		<td class="table-driver">${object._driverExperience !== '' ? object._driverExperience : '-'}</td>
-		<td class="table-driver">${object._workСarMake !== '' ? object._workСarMake : 'нет'}</td>
-		<td class="table-driver">${object._ownCars[0] !== '' ? object._ownCars.join(', ') : 'нет'}</td>
-		<td class="table-developer">-</td>
-		<td class="table-developer">-</td>
-		<td><button class="table-del-btn"></button></td>
-	</tr>
+				<tr>
+					<td>${object._position}</td>
+					<td>${object._firstName !== '' ? object._firstName : '-'}</td>
+					<td>${object._lastName !== '' ? object._lastName : '-'}</td>
+					<td>${object._birthDate ? dateToLocaleFormat(object._birthDate) : '-'}</td>
+					<td>${booleanToWords(object._isMarried)}</td>
+					<td>${object._children[0] !== '' ? object._children.join(', ') : 'нет'}</td>
+					<td>${object._grade !== '' ? object._grade : '-'}</td>
+					<td>${object._hiredDate ? dateToLocaleFormat(object._hiredDate) : '-'}</td>
+					<td class="table-driver">${object._driverLicenses !== '' ? object._driverLicenses.join(', ') : '-'}</td>
+					<td class="table-driver">${object._driverExperience !== '' ? object._driverExperience : '-'}</td>
+					<td class="table-driver">${object._workСarMake !== '' ? object._workСarMake : 'нет'}</td>
+					<td class="table-driver">${object._ownCars[0] !== '' ? object._ownCars.join(', ') : 'нет'}</td>
+					<td class="table-developer">-</td>
+					<td class="table-developer">-</td>
+					<td><button class="table-del-btn" type="button"></button></td>
+				</tr>
 			`);
 		} else if (object._position === 'Разработчик') {
 			tableBody.insertAdjacentHTML('beforeend', `
-	<tr>
-		<td>${object._position}</td>
-		<td>${object._firstName !== '' ? object._firstName : '-'}</td>
-		<td>${object._lastName !== '' ? object._lastName : '-'}</td>
-		<td>${object._birthDate ? dateToLocaleFormat(object._birthDate) : '-'}</td>
-		<td>${booleanToWords(object._isMarried)}</td>
-		<td>${object._children[0] !== '' ? object._children.join(', ') : 'нет'}</td>
-		<td>${object._grade !== '' ? object._grade : '-'}</td>
-		<td>${object._hiredDate ? dateToLocaleFormat(object._hiredDate) : '-'}</td>
-		<td class="table-driver">-</td>
-		<td class="table-driver">-</td>
-		<td class="table-driver">-</td>
-		<td class="table-driver">-</td>
-		<td class="table-developer">${object._programmingLanguages[0] !== '' ? object._programmingLanguages.join(', ') : '-'}</td>
-		<td class="table-developer">${object._employmentType !== undefined ? object._employmentType : '-'}</td>
-		<td><button class="table-del-btn"></button></td>
-	</tr>
+				<tr>
+					<td>${object._position}</td>
+					<td>${object._firstName !== '' ? object._firstName : '-'}</td>
+					<td>${object._lastName !== '' ? object._lastName : '-'}</td>
+					<td>${object._birthDate ? dateToLocaleFormat(object._birthDate) : '-'}</td>
+					<td>${booleanToWords(object._isMarried)}</td>
+					<td>${object._children[0] !== '' ? object._children.join(', ') : 'нет'}</td>
+					<td>${object._grade !== '' ? object._grade : '-'}</td>
+					<td>${object._hiredDate ? dateToLocaleFormat(object._hiredDate) : '-'}</td>
+					<td class="table-driver">-</td>
+					<td class="table-driver">-</td>
+					<td class="table-driver">-</td>
+					<td class="table-driver">-</td>
+					<td class="table-developer">${object._programmingLanguages[0] !== '' ? object._programmingLanguages.join(', ') : '-'}</td>
+					<td class="table-developer">${object._employmentType !== undefined ? object._employmentType : '-'}</td>
+					<td><button class="table-del-btn" type="button"></button></td>
+				</tr>
 			`);
 		}
+		delBtns = tableBody.querySelectorAll('.table-del-btn');
+		delBtns.forEach((btn, index) => {
+			if (btn.getAttribute('listener') !== 'true') {
+				btn.setAttribute('listener', 'true');
+				btn.addEventListener('click', () => {
+					employeesArray.splice(index, 1);
+					renewLocalStorage();
+					renderTable();
+				});
+			}
+		})
 	});
 }
 
@@ -187,6 +201,11 @@ class Employee {
 	}
 	set grade(str) {
 		this.grade = str;
+	}
+	delete() {
+		this.employeesArray.splice(this.index, 1);
+		this.renewLocalStorage();
+		this.renderTable();
 	}
 }
 
@@ -275,7 +294,6 @@ selectEmployeePosition.addEventListener('change', () => {
 
 saveBtn.addEventListener('click', (evt) => {
 	evt.preventDefault();
-	// Employee.incrementCount();
 	if (selectEmployeePosition.value === 'driver') {
 		const driver = new Driver(inputsCollection[0].value, inputsCollection[1].value, inputsCollection[2].value, isMarriedCheckbox.checked, [], '', inputsCollection[4].value, [], driverExperienceInput.value, inputsCollection[5].value, hasOwnCarCheckbox.checked, []);
 		driver._children = inputsCollection[3].value.split(', ');
