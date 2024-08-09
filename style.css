@@ -8,13 +8,26 @@ h1 {
 	color: #aaa;
 }
 
+button {
+	cursor: pointer;
+	border-radius: 25px;
+	padding: 12px 25px;
+	background-color: slategray;
+	color: #eee;
+	font-size: 25px;
+}
+
 .wrapper {
+	margin: 0 auto;
 	display: flex;
+	flex-wrap: wrap;
 	justify-content: center;
 	align-items: center;
+	width: 500px;
 }
 
 .logo {
 	opacity: .3;
-	width: 25%;
+	width: 500px;
+	flex-grow: 1;
 }

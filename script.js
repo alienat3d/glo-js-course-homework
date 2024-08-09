@@ -1,30 +1,39 @@
 'use strict';
 
-const SERVER_URL = 'https://jsonplaceholder.typicode.com/posts';
-const LOCAL_DB = 'db.json';
+const SERVER_URL = 'https://jsonplaceholder.typicode.com/post';
+// const SERVER_URL = 'http://localhost:3000/posts';
+const LOCAL_DB = 'db/db.json';
 
-const obj = {
-  name: 'John',
-  email: 'john@example.com',
-  password: 'password@example.com',
-  gender: 'male',
-}
+const btn = document.querySelector('button');
 
-const getData = (LOCAL_DB) => {
-  fetch(LOCAL_DB)
-    .then(res => res.json());
-}
+const getData = (LOCAL_DB) =>
+	fetch(LOCAL_DB)
+		.then(res => {
+			if (res.status === 200) {
+				return res.json();
+			} else {
+				throw new Error("Произошла ошибка, данные не были найдены!");
+			}
+		})
+		.then(data => sendData(SERVER_URL, data))
+		.catch(err => console.warn(err));
 
 function sendData(url, data) {
-  fetch(url, {
-    method: 'POST',
-    body: JSON.stringify(data),
-    headers: {
-      'Content-type': 'application/json;charset=UTF-8'
-    },
-  })
-    .then(res => res.json())
+	fetch(url, {
+		method: 'POST',
+		body: JSON.stringify(data),
+		headers: {
+			'Content-Type': 'application/json'
+		},
+	})
+		.then(res => {
+		if (res.status === 201) {
+			return res.json();
+		} else {
+			throw new Error("Произошла ошибка, данные не были сохранены!");
+		}
+	})
+		.catch(err => console.warn(err));
 }
 
-getData(LOCAL_DB);
-sendData('db.json[posts]', obj);
+btn.addEventListener('click', () => getData(LOCAL_DB));
