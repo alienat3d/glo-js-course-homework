@@ -1,169 +1,20 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
-
 <head>
 	<meta charset="UTF-8">
-	<meta name="viewport"
-		content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-
-	<link rel="apple-touch-icon" sizes="180x180" href="favicon">
-	<link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-light-32x32.png" media="(prefers-color-scheme: light)">
-	<link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-dark-32x32.png" media="(prefers-color-scheme: dark)">
-	<link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-light-16x16.png" media="(prefers-color-scheme: light)">
-	<link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-dark-16x16.png" media="(prefers-color-scheme: dark)">
-	<link rel="manifest" href="favicon/site.webmanifest">
-
-	<title>Форма учёта сотрудников компании</title>
-
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="apple-touch-icon" sizes="180x180" href="./favicon/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="./favicon/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="./favicon/favicon-16x16.png">
+<!--	<link rel="manifest" href="./favicon/site.webmanifest">-->
+	<title>Урок №26 - ДЗ</title>
 	<script src="script.js" defer></script>
 	<link href="style.css" rel="stylesheet">
 </head>
-
 <body>
-	<h1>Форма учёта сотрудников компании</h1>
-	<form action='/'>
-		<fieldset>
-			<label for="first-name">Введите имя сотрудника\-цы: <input id="first-name" type="text" name="first-name"
-					required /></label>
-			<label for="last-name">Введите фамилию сотрудника\-цы: <input id="last-name" type="text" name="last-name"
-					required /></label>
-			<label for="birth-date">Введите дату рождения сотрудника\-цы (формат: "полный год-месяц-день"): <input
-					id="birth-date" type="text" name="birth-date" required /></label>
-		</fieldset>
-		<fieldset>
-			<label for="is-married">
-				<input id="is-married" type="checkbox" name="is-married" /> Женат \ За мужем
-			</label>
-			<label for="children">
-				Дети (формат: "имя 1, имя 2, ..."):
-				<input id="children" type="text" name="children" />
-			</label>
-		</fieldset>
-		<fieldset>
-			<select id="position" name="position" required>
-				<option value="">Выберете должность сотрудника</option>
-				<option value="driver">Водитель</option>
-				<option value="developer">Разработчик</option>
-			</select>
-			<label for="hired-date">Поступил\-а на работу (формат: "полный год-месяц-день"): <input id="hired-date"
-					type="text" name="hired-date" required /></label>
-		</fieldset>
-		<fieldset id="driver-grade">
-			<legend>Выберете уровень компетенции сотрудника</legend>
-			<label for="ordinary-driver">
-				<input id="ordinary-driver" type="radio" name="driver-grade" /> Обычный водитель
-			</label>
-			<label for="skilled-driver">
-				<input id="skilled-driver" type="radio" name="driver-grade" /> Опытный водитель
-			</label>
-			<label for="professional-driver">
-				<input id="professional-driver" type="radio" name="driver-grade" /> Профессиональный водитель
-			</label>
-		</fieldset>
-		<fieldset id="driver-licenses">
-			<label for="a-category">
-				<input id="a-category" type="checkbox" name="a-category" />A
-			</label>
-			<label for="a1-category">
-				<input id="a1-category" type="checkbox" name="a1-category" />A1
-			</label>
-			<label for="b-category">
-				<input id="b-category" type="checkbox" name="b-category" />B
-			</label>
-			<label for="b1-category">
-				<input id="b1-category" type="checkbox" name="b1-category" />B1
-			</label>
-			<label for="c-category">
-				<input id="c-category" type="checkbox" name="c-category" />C
-			</label>
-			<label for="c1-category">
-				<input id="c1-category" type="checkbox" name="c1-category" />C1
-			</label>
-			<label for="d-category">
-				<input id="d-category" type="checkbox" name="d-category" />D
-			</label>
-			<label for="d1-category">
-				<input id="d1-category" type="checkbox" name="d1-category" />D1
-			</label>
-			<label for="be-category">
-				<input id="be-category" type="checkbox" name="be-category" />BE
-			</label>
-			<label for="ce-category">
-				<input id="ce-category" type="checkbox" name="ce-category" /> CE
-			</label>
-			<label for="c1e-category">
-				<input id="c1e-category" type="checkbox" name="c1e-category" />C1E
-			</label>
-			<label for="m-category">
-				<input id="m-category" type="checkbox" name="m-category" />M
-			</label>
-		</fieldset>
-		<fieldset id="developer-grade">
-			<legend>Выберете уровень компетенции сотрудника</legend>
-			<label for="junior">
-				<input id="junior" type="radio" name="developer-grade" /> Junior
-			</label>
-			<label for="middle">
-				<input id="middle" type="radio" name="developer-grade" /> Middle
-			</label>
-			<label for="Senior">
-				<input id="Senior" type="radio" name="developer-grade" /> Senior
-			</label>
-		</fieldset>
-		</fieldset>
-		<fieldset id="driver-fieldset">
-			<label for="driver-experience">Опыт вождения: <input id="driver-experience" type="number" name="driver-experience"
-					required /></label>
-			<label for="work-car-make">Рабочий автомобиль: <input id="work-car-make" type="text" name="work-car-make"
-					required /></label>
-			<label for="has-own-car"><input id="has-own-car" type="checkbox" name="has-own-car" required /> Есть
-				собственный\-е автомобиль\-и</label>
-			<label for="own-cars">Собственный\-е автомобиль\-и: (формат: "марка (тип) 1, марка (тип) 2, ..."): <input
-					id="own-cars" type="text" name="own-cars" required /></label>
-		</fieldset>
-		<fieldset class="programming-languages">
-			<label for="programming-languages">Знаю язык\-и программирования: (формат: "ЯП 1, ЯП 2, ..."): <input
-					id="programming-languages" type="text" name="programming-languages" required /></label>
-		</fieldset>
-		<fieldset id="developer-fieldset">
-			<legend>Выберете тип трудоустройства сотрудника</legend>
-			<label for="in-office-staff">
-				<input id="in-office-staff" type="radio" name="employment-type" /> Штатный сотрудник
-			</label>
-			<label for="remote-staff">
-				<input id="remote-staff" type="radio" name="employment-type" /> Штатный сотрудник на удалёнке
-			</label>
-			<label for="freelancer">
-				<input id="freelancer" type="radio" name="employment-type" /> Фрилансер
-			</label>
-		</fieldset>
-		<input type="submit" value="Сохранить" />
-	</form>
-	<table>
-		<thead>
-			<tr>
-				<th>Должность</th>
-				<th>Имя</th>
-				<th>Фамилия</th>
-				<th>Дата рождения</th>
-				<th>Женат \ За мужем</th>
-				<th>Дети</th>
-				<th>Уровень компетенций</th>
-				<th>Дата трудоустройства</th>
-				<th class="table-driver">Категории водительских прав</th>
-				<th class="table-driver">Стаж вождения</th>
-				<th class="table-driver">Рабочий автомобиль</th>
-				<th class="table-driver">Собственный автомобиль</th>
-				<th class="table-developer">Язык/-и программирования</th>
-				<th class="table-developer">Тип трудоустройства</th>
-				<th>Удалить</th>
-			</tr>
-		</thead>
-		<tbody>
-			<!-- ==| Content generated by JS |== -->
-		</tbody>
-	</table>
+	<h1>Open Dev Tools</h1>
+	<div class="wrapper">
+		<img class="logo" src="js.svg" alt="JavaScript логотип">
+	</div>
 </body>
-
 </html>

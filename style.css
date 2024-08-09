@@ -1,121 +1,20 @@
 body {
-	background-color: #eee;
-	color: #232323;
-	font-size: 20px;
+	background-color: #2a2a2a;
 }
 
-form {
-	user-select: none;
-}
-
-label {
-	margin: 7px 0;
-	display: block;
-	font-size: 22px;
-	cursor: pointer;
-}
-
-#driver-grade,
-#developer-grade,
-#driver-licenses,
-#driver-fieldset,
-[for="own-cars"],
-.programming-languages,
-#developer-fieldset {
-	display: none;
-}
-
-.table-driver {
-	color: #191ba6;
-}
-
-.table-developer {
-	color: #531599;
-}
-
-#driver-licenses label {
-	margin-right: 10px;
-	display: inline-block;
-}
-
-#driver-licenses input {
-	cursor: pointer;
-}
-
-input {
-	padding: 10px 12px 8px;
-	font-size: 22px;
-}
-
-select {
-	margin: 7px 0;
-	font-size: 22px;
-}
-
-[type="submit"] {
-	cursor: pointer;
-	display: block;
-	border-radius: 15px;
+h1 {
+	margin-top: 3%;
 	text-align: center;
-	margin: 10px 0;
-	padding: 10px 35px;
-	font-size: 20px;
-	background-color: slateblue;
-	color: #eee;
+	color: #aaa;
 }
 
-table,
-th,
-td {
-	border: 1px solid #aaa;
-	border-collapse: collapse;
-	font-size: 20px;
+.wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
-table {
-	width: 100%;
-}
-
-tbody {
-	text-align: right;
-}
-
-th {
-	padding: 5px;
-}
-
-td {
-	padding: 5px;
-	text-align: center;
-}
-
-th:last-of-type {
-	color: #f54636;
-}
-
-.table-del-btn {
-	cursor: pointer;
-	border: 0;
-	width: 25px;
-	height: 25px;
-	vertical-align: middle;
-	background: url('delete-button.svg') no-repeat center/contain;
-}
-
-@media (prefers-color-scheme: dark) {
-	body {
-		background-color: #232323;
-		color: #eee;
-	}
-	.table-driver {
-		color: beige;
-	}
-	
-	.table-developer {
-		color: rgb(203, 225, 244);
-	}
-	[type="submit"] {
-		background-color: yellow;
-		color: #232323;
-	}
+.logo {
+	opacity: .3;
+	width: 25%;
 }
