@@ -1,0 +1,49 @@
+* {
+	box-sizing: border-box;
+}
+
+html, body {
+	margin: 0;
+	height: 100%;
+}
+
+.container {
+	margin: 0 auto;
+	padding: 0 15px;
+	max-width: 1600px;
+}
+
+.content {
+	text-align: center;
+	padding-top: 300px;
+	background: #233445 no-repeat center/cover;
+}
+
+.car-selector {
+	margin: 0 auto;
+	display: block;
+	cursor: pointer;
+	border-radius: 7px 7px 0 0;
+	padding: 5px 7px;
+	min-width: 300px;
+	font-size: 25px;
+	background-color: #000;
+	color: #1967D2;
+}
+
+.info-output {
+	border-radius: 0 0 7px 7px;
+	min-width: 300px;
+	background-color: rgba(0, 0, 0, .9);
+	color: #1967D2;
+	font-size: 25px;
+}
+
+.info-output {
+	display: inline-block;
+}
+
+.info-output p {
+	text-align: left;
+	margin: 10px 15px;
+}
